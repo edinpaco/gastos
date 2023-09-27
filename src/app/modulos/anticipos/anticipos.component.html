@@ -116,13 +116,28 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success">Guardar</button>
+
+          <div class="container">
+
+            <div class="form-group">
+              <label for="monto" class="font-medium">Fecha:</label>
+              <input type="date" class="form-control rounded" id="date">
+            </div>
+
+            <div class="form-group">
+              <label for="monto" class="font-medium">Monto Transferido:</label>
+              <input type="number" min="1" class="form-control rounded" id="monto" placeholder="Ingrese el monto">
+            </div>
+                      
+            <div class="form-group">
+              <label for="cuenta" class="font-medium">Comentario:</label>
+              <input type="text" class="form-control rounded" id="cuenta" placeholder="Comentario">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-success">Guardar</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
