@@ -1,0 +1,15 @@
+a:hover {
+    background-color: var(--pyme);
+    border-radius: 5px;
+    text-decoration: none;
+    color: #000000;
+}
+
+a{
+    color: #fff;
+    text-decoration: none;
+  }
+
+.dropdown-menu{
+    background-color: var(--dropMenu);
+}

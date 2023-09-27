@@ -1,0 +1,36 @@
+.variables{
+  --primary: #111B54;
+  --light: #ffffff;
+  --grey: #efefef;
+  --pyme: #ed8900;
+}
+
+.tabledate{
+    width: 100%;
+}
+
+.tabledate th{
+    background-color: var(--primary);
+    color: var(--light);
+    border: 1px solid var(--light);
+    font-size: 13px;
+    text-align: center;
+}
+
+.tabledate td{
+    border: 1px solid var(--grey);
+    font-size: 13px;
+    text-align: center;
+}
+
+.labelDashboard{
+    padding: 5px 30px 5px 30px;
+}
+
+.cardDashboard{
+    padding: 5px 30px 5px 30px;
+}
+
+.tablasDashboard{
+    padding: 5px 30px 5px 30px;
+}

@@ -1,0 +1,42 @@
+.variables{
+   --primary: #111B54;
+   --light: #ffffff;
+   --grey: #efefef;
+   --pyme: #ed8900;
+}
+   
+.tableConsultas{
+    width: 100%;
+}
+   
+.tableConsultas th{
+    background-color: var(--primary);
+    color: var(--light);
+    border: 1px solid var(--light);
+    font-size: 13px;
+    text-align: center;
+}
+   
+.tableConsultas td{
+    border: 1px solid var(--grey);
+    font-size: 13px;
+    text-align: center;
+}
+ 
+.containerTabla{
+    height: 100%;
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+}
+ 
+.card-body{
+    overflow-y: scroll;
+}
+
+.cardDashboard{
+   padding: 5px 30px 5px 30px;
+}
+
+.containerLabel{
+    padding: 5px 30px 5px 30px;
+}
