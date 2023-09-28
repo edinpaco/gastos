@@ -9,6 +9,7 @@ import { DashboardComponent } from './modulos/dashboard/dashboard.component';
 import { ConsultaComponent } from './modulos/consulta/consulta.component';
 import { MenuComponent } from './modulos/menu/menu.component';
 import { AnticiposComponent } from './modulos/anticipos/anticipos.component';
+import { GastosComponent } from './modulos/gastos/gastos.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { AnticiposComponent } from './modulos/anticipos/anticipos.component';
     DashboardComponent,
     ConsultaComponent,
     MenuComponent,
-    AnticiposComponent
+    AnticiposComponent,
+    GastosComponent
   ],
   imports: [
     BrowserModule,
