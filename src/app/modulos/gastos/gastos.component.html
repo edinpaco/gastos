@@ -6,15 +6,68 @@
             </div>
 
             <div class="col-lg-2 col-md-4 d-flex">
-                <button class="btn btn-success w-100 align-self-center" data-toggle="modal" data-target="#exampleModal">Nuevo Gasto</button>
+                <button class="btn btn-success w-100 align-self-center" data-toggle="modal" data-target="#AddModal">Nuevo Gasto</button>
             </div>
         </div>
     </div>
 </section>
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<section>
+  <div class="containerTabla">
+      <div class="row">
+          <div class="col-lg-12 my-3">
+              <div class="card rounded-0">
+                  <div class="card-header bg-light">
+                    <h6 class="font-weight-bold mb-0">Resumen Gastos Realizados</h6>
+                  </div>
+                  <div class="card-body">
+                    <table class="tablagastos">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Ciudad de origen</th>
+                          <th>Ciudad de destino</th>
+                          <th>Fecha de envío</th>
+                          <th>Transportadora</th>
+                          <th>Guía del envío</th>
+                          <th>Valor del envío</th>
+                          <th>Proyecto</th>
+                          <th>Tipo de devolución</th>
+                          <th>Comentario</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Medellin</td>
+                            <td>Bogota</td>
+                            <td>30/09/2023</td>
+                            <td>Servientrega</td>
+                            <td>123456789</td>
+                            <td>$ 20.000</td>
+                            <td>HughesNet</td>
+                            <td>Devolución</td>
+                            <td>N|a</td>
+                            <td>
+                              <a href="#" class="edit" title="Editar" data-toggle="modal" data-target="#EditModal"><i class="icon ion-md-create lead mr-2"></i></a>
+                              
+                              <a href="#" class="delete" title="Eliminar"><i class="icon ion-md-trash lead mr-2"></i></a>
+                            </td>
+                          </tr>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<!-- Modal Ingreso -->
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -24,6 +77,146 @@
           </button>
         </div>
 
+        <div class="container">
+            <form class="w-100 mx-auto">
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Ciudad de origen</label>
+                    <input class="form-control" type="text">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Ciudad de destino</label>
+                    <input class="form-control" type="text">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Fecha de envío</label>
+                    <input class="form-control" type="date">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Transportadora</label>
+                    <input class="form-control" type="text">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Guía del envío</label>
+                    <input class="form-control" type="number">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Valor del envío</label>
+                    <input class="form-control" type="number" step="0.01">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Proyecto</label>
+                    <input class="form-control" type="text">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Tipo de devolución</label>
+                    <input class="form-control" type="text">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label mb-2">Comentario</label>
+                    <input class="form-control" type="text">
+                  </div>
+                </div>
+              </form>
+              
+        </div>  
+        
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-success">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- Modal Edicion-->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Gasto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="container">
+          <form class="w-100 mx-auto">
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Ciudad de origen</label>
+                  <input class="form-control" type="text">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Ciudad de destino</label>
+                  <input class="form-control" type="text">
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Fecha de envío</label>
+                  <input class="form-control" type="date">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Transportadora</label>
+                  <input class="form-control" type="text">
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Guía del envío</label>
+                  <input class="form-control" type="number">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Valor del envío</label>
+                  <input class="form-control" type="number" step="0.01">
+                </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Proyecto</label>
+                  <input class="form-control" type="text">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Tipo de devolución</label>
+                  <input class="form-control" type="text">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label mb-2">Comentario</label>
+                  <input class="form-control" type="text">
+                </div>
+              </div>
+            </form>
+            
+      </div>  
+      
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Modal Eliminar-->
+  <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Gasto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
         <div class="container">
             <form class="w-100 mx-auto">
                 <div class="row mb-4">
