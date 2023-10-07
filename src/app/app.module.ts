@@ -11,6 +11,7 @@ import { ConsultaComponent } from './modulos/consulta/consulta.component';
 import { MenuComponent } from './modulos/menu/menu.component';
 import { AnticiposComponent } from './modulos/anticipos/anticipos.component';
 import { GastosComponent } from './modulos/gastos/gastos.component';
+import { ConfirmagastoComponent } from './modulos/confirmagasto/confirmagasto.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { GastosComponent } from './modulos/gastos/gastos.component';
     ConsultaComponent,
     MenuComponent,
     AnticiposComponent,
-    GastosComponent
+    GastosComponent,
+    ConfirmagastoComponent
   ],
   imports: [
     BrowserModule,

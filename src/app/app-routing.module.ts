@@ -4,6 +4,7 @@ import { DashboardComponent } from './modulos/dashboard/dashboard.component';
 import { ConsultaComponent } from './modulos/consulta/consulta.component';
 import { AnticiposComponent } from './modulos/anticipos/anticipos.component';
 import { GastosComponent } from './modulos/gastos/gastos.component';
+import { ConfirmagastoComponent } from './modulos/confirmagasto/confirmagasto.component';
 
 const routes: Routes = [
 
@@ -11,7 +12,8 @@ const routes: Routes = [
   {path: 'dashboard', component:DashboardComponent},
   {path: 'consulta', component:ConsultaComponent},
   {path: 'anticipos', component:AnticiposComponent},
-  {path: 'gastos', component:GastosComponent}
+  {path: 'gastos', component:GastosComponent},
+  {path: 'confirmar_gasto', component:ConfirmagastoComponent}
 
 ];
 
