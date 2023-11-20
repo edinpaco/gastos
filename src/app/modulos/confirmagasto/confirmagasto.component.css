@@ -39,6 +39,7 @@
 .card-small:hover {
     transform: scale(1.05); /* Aumentamos ligeramente el tamaño en un 5% */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Agregamos una sombra suave */
+    
 }
 
 .card img {
@@ -59,3 +60,8 @@
     color: #111B54;
 }
 
+a:hover{
+    background-color: #009929;
+    border-color: #009929;
+    color: #FFF;
+}
