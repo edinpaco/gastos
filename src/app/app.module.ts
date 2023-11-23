@@ -12,6 +12,8 @@ import { MenuComponent } from './modulos/menu/menu.component';
 import { AnticiposComponent } from './modulos/anticipos/anticipos.component';
 import { GastosComponent } from './modulos/gastos/gastos.component';
 import { ConfirmagastoComponent } from './modulos/confirmagasto/confirmagasto.component';
+import { UsuariosComponent } from './modulos/usuarios/usuarios.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -21,12 +23,14 @@ import { ConfirmagastoComponent } from './modulos/confirmagasto/confirmagasto.co
     MenuComponent,
     AnticiposComponent,
     GastosComponent,
-    ConfirmagastoComponent
+    ConfirmagastoComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DataTablesModule
+    DataTablesModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

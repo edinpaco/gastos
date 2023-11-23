@@ -5,6 +5,7 @@ import { ConsultaComponent } from './modulos/consulta/consulta.component';
 import { AnticiposComponent } from './modulos/anticipos/anticipos.component';
 import { GastosComponent } from './modulos/gastos/gastos.component';
 import { ConfirmagastoComponent } from './modulos/confirmagasto/confirmagasto.component';
+import { UsuariosComponent } from './modulos/usuarios/usuarios.component';
 
 const routes: Routes = [
 
@@ -13,7 +14,8 @@ const routes: Routes = [
   {path: 'consulta', component:ConsultaComponent},
   {path: 'anticipos', component:AnticiposComponent},
   {path: 'gastos', component:GastosComponent},
-  {path: 'confirmar_gasto', component:ConfirmagastoComponent}
+  {path: 'confirmar_gasto', component:ConfirmagastoComponent},
+  {path: 'usuarios', component:UsuariosComponent}
 
 ];
 
