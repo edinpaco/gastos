@@ -35,11 +35,15 @@
 
 
 .delete {
-   color: red; 
+   color: red;
+   border: none;
+   background-color: #fff;
 }
 
 .edit {
     color: rgb(255, 136, 0);
+    border: none;
+    background-color: #fff;
  }
   
 /* Estilos para el ícono */

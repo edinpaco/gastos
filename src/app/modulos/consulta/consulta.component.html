@@ -20,67 +20,38 @@
                       <h6 class="font-weight-bold mb-0">Resumen Guias Regitradas</h6>
                     </div>
                     <div class="card-body">
-                        <table class="tableConsultas">
-                            <thead>
-                              <tr>
-                                <th># GUIA</th>
-                                <th>VALOR</th>
-                                <th>ESTADO</th>
-                                <th>ORIGEN</th>
-                                <th>ORIGEN</th>
-                                <th>ORIGEN</th>
-                                <th>ORIGEN</th>
-                                <th>ORIGEN</th>
-                                <th>ORIGEN</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>9134567890</td>
-                                <td>$50.500</td>
-                                <td>Cancelada</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                              </tr>
-                              <tr>
-                                <td>9134567890</td>
-                                <td>$50.500</td>
-                                <td>Pendiente</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                              </tr>
-                              <tr>
-                                <td>9134567890</td>
-                                <td>$50.500</td>
-                                <td>Cancelada</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                              </tr>
-                              <tr>
-                                <td>9134567890</td>
-                                <td>$50.500</td>
-                                <td>Pendiente</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                                <td>Medellin</td>
-                              </tr>
-                            </tbody>
-                        </table>
+                      <table class="tablagastos">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>FECHA</th>
+                            <th>RAZON SOCIAL</th>
+                            <th>NIT/CC</th>
+                            <th>GUIA</th>
+                            <th>FACTURA</th>
+                            <th>PROYECTO</th>
+                            <th>CONCEPTO</th>
+                            <th>DESCRIPCION</th>
+                            <th>VALOR</th>
+                            <th>DOCUMENTO</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listarSoportes">
+                              <td>{{ item.id }}</td>
+                              <td>{{ truncateText(item.fecha, 15) }}</td>
+                              <td>{{ truncateText(item.razon_social, 15) }}</td>
+                              <td>{{ truncateText(item.nit_cc, 15) }}</td>
+                              <td>{{ truncateText(item.guia, 15) }}</td>
+                              <td style="color: red;">{{ truncateText(item.factura, 15) }}</td>
+                              <td>{{ truncateText(item.proyecto, 15) }}</td>
+                              <td>{{ truncateText(item.concepto, 15) }}</td>
+                              <td>{{ truncateText(item.descripcion, 15) }}</td>
+                              <td>{{ item.valor | currency:'USD':'symbol':'1.0-0' }}</td>
+                              <td>{{ truncateText(item.documento, 15) }}</td>
+                            </tr>
+                        </tbody>
+                      </table>
                           
                           
                     </div>
