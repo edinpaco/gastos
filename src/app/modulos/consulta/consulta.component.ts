@@ -1,6 +1,4 @@
 import { Component, AfterViewInit } from '@angular/core';
-import * as $ from 'jquery';
-import 'datatables.net';
 import { SoportesService } from 'src/app/services/soportes.service';
 import { Soporte } from 'src/app/interfaces/soportes';
 

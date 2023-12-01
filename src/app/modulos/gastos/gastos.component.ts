@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { SoportesService } from 'src/app/services/soportes.service';
 import { Soporte } from 'src/app/interfaces/soportes';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-gastos',
@@ -17,7 +19,7 @@ export class GastosComponent {
 
   listarSoportes: Soporte[] = [];
 
-  constructor(private _SoportesService: SoportesService, private toastr: ToastrService, private fb: FormBuilder) { 
+  constructor(private _SoportesService: SoportesService, private toastr: ToastrService, private fb: FormBuilder, private el: ElementRef) { 
 
   //Formulario para Insertar soportes en la base de datos
 
@@ -57,8 +59,10 @@ export class GastosComponent {
 
 // Función para ingresar soporte en la base de datos
 
-  addSuport(){
-    const Soporte: Soporte ={
+addSuport() {
+  // Verifica si el formulario es válido
+  if (this.formSuports.valid) {
+    const Soporte: Soporte = {
       fecha: this.formSuports.value.fecha,
       razon_social: this.formSuports.value.razon_social,
       nit_cc: this.formSuports.value.nit_cc,
@@ -71,16 +75,45 @@ export class GastosComponent {
       documento: this.formSuports.value.documento
     }
 
-      this._SoportesService.saveSoporte(Soporte).subscribe(() =>{
-        //window.location.reload();
-        this.getListarSoportes(); // Actualiza la lista localmente sin recargar la página
-        setTimeout(() => {
-        this.toastr.success('El soporte fue guardado con exito', 'Soporte Guardado');
-        }), 10500;
-      })
-      
-    
+    this._SoportesService.saveSoporte(Soporte).subscribe(
+      () => {
+        // Limpia los campos del formulario
+        this.formSuports.reset();
+
+        // Cierra el modal utilizando JavaScript puro
+        const modalElement = this.el.nativeElement.querySelector('#AddModal');
+        
+        console.log('Modal Element:', modalElement);
+
+        if (modalElement) {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.hide();
+          console.log('Modal ocultado con éxito');
+        } else {
+          console.error('No se encontró el elemento del modal');
+        }
+
+
+        // Recarga la lista de soportes
+        this.getListarSoportes();
+
+        // Muestra el toastr después de cerrar el modal
+        this.toastr.success('El soporte fue guardado con éxito', 'Soporte Guardado');
+      },
+      (error) => {
+        // Maneja el error, muestra un toastr, o realiza otras acciones según sea necesario
+        console.error('Error al guardar el soporte:', error);
+        this.toastr.error('Hubo un error al guardar el soporte', 'Error');
+      }
+    );
+  } else {
+    // Muestra un toastr indicando que el formulario es inválido
+    this.toastr.error('Por favor, complete todos los campos antes de enviar el formulario.', 'Formulario Inválido');
   }
+}
+
+
+
 
 
 // Función para editar soporte en la base de datos
@@ -88,7 +121,7 @@ export class GastosComponent {
 getSoporte(id: number){
 
   this._SoportesService.getSoporte(id).subscribe((data:Soporte) => {
-      this.formSuports.setValue({
+      this.formEdit.setValue({
         fecha: data.fecha,
         razon_social: data.razon_social,
         nit_cc: data.nit_cc,
