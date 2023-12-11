@@ -1,0 +1,738 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DataApiService } from 'src/app/services/data-api.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import * as moment from 'moment';
+import { Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-orden',
+  templateUrl: './orden.component.html',
+  styleUrls: ['./orden.component.scss']
+})
+export class OrdenComponent implements OnInit {
+  form1 = new FormGroup({
+    observaciones: new FormControl('', Validators.required),
+  });
+
+  form2 = new FormGroup({
+    nombreCliente: new FormControl('', Validators.required),
+    telefono1Cliente: new FormControl('', Validators.required),
+    telefono2Cliente: new FormControl(''),
+    ubicacionObsCliente: new FormControl('', Validators.required),
+    conversacionObsCliente: new FormControl('', Validators.required),
+    observacionesCliente: new FormControl('', Validators.required),
+    tecnicoNombre: new FormControl('', Validators.required),
+    fechaAgenda: new FormControl(''),
+    franjaAgenda: new FormControl('', Validators.required),
+  });
+  
+  form3 = new FormGroup({
+    tipificacionNombre: new FormControl('', Validators.required),
+    observaciones: new FormControl('', Validators.required),
+  });
+
+  form4 = new FormGroup({
+    fechaNueva: new FormControl('', Validators.required),
+    tipo: new FormControl('', Validators.required),
+  });
+
+  form5 = new FormGroup({
+    evento: new FormControl('', Validators.required),
+    observacionesEvento: new FormControl('', Validators.required),
+  });
+
+  form6 = new FormGroup({
+    tipificacionNombre: new FormControl('', Validators.required),
+    auditoria: new FormControl('', Validators.required),
+    observaciones: new FormControl('', Validators.required),
+  });
+
+  hallazgos = "";
+  chb1 = false;
+  chb2 = false;
+  chb3 = false;
+  chb4 = false;
+  chb5 = false;
+  chb6 = false;
+  chb7 = false;
+  chb8 = false;
+  chb9 = false;
+  chb10 = false;
+  chb11 = false;
+  chb12 = false;
+  chb13 = false;
+  chb14 = false;
+  chb15 = false;
+  chb16 = false;
+  chb17 = false;
+
+  isDisabled: boolean = true;
+  estadoNuevoValor = "";
+  fechaEvento = "";
+  usuarioEvento = "";
+  nombreEvento = "";
+  observacionesEvento = "";
+
+  conversacionEst = "";
+  dateEst = "";
+  fechaAgendamientoEst = "";
+  franjaAgendamientoEst = "";
+  nameEst = "";
+  nombreClienteEst = "";
+  observationsEst = "";
+  hallazgosEst = "";
+  auditoriaEst = "";
+  tecnicoEst = "";
+  telefono1Est = "";
+  telefono2Est = "";
+  tipificacionEst = "";
+  ubicacionEst = "";
+  userEst = "";
+  tipoAlertaEstado = 0;
+
+  carga = false;
+  existe = false;
+  so;
+  orden;
+  estadosSO;
+  eventosSO;
+  verificacionSO;
+  estadoSO;
+  departamentos;
+  ciudades;
+  tecnicos;
+  tipificaciones;
+  eventos;
+  cierres;
+  fechaActual = 0;
+  estados = [];
+  tipoAlerta = 0;
+  alerta1 = true;
+  constructor(private route: ActivatedRoute, private dataApi: DataApiService, private router: Router, private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.getOrden();
+  }
+  
+  async getOrden(){
+
+    // let log = await this.dataApi.getLogEventosFechas("Fecha 1", "Fecha 2").toPromise();
+    // console.log(log)
+    
+    // for(let k in log){
+    //   // console.log(log[k].date)
+    //   let fechaDiv = log[k].date.split(" ")[0];
+    //   let horaDiv = log[k].date.split(" ")[1];
+    //   let diaDiv = fechaDiv.split("/")[0];
+    //   let mesDiv = fechaDiv.split("/")[1];
+    //   let anioDiv = fechaDiv.split("/")[2];
+    //   let fechaA = anioDiv+"-"+mesDiv+"-"+diaDiv+" "+horaDiv;
+    //   // console.log(fechaA);
+
+    //   await this.dataApi.updateFechaReal(log[k].id, fechaA).toPromise();
+
+    //   // console.log("------------")
+    //   // updateFechaReal()
+    // }
+
+    this.chb1 = false;
+    this.chb2 = false;
+    this.chb3 = false;
+    this.chb4 = false;
+    this.chb5 = false;
+    this.chb6 = false;
+    this.chb7 = false;
+    this.chb8 = false;
+    this.chb9 = false;
+    this.chb10 = false;
+    this.chb11 = false;
+    this.chb12 = false;
+    this.chb13 = false;
+    this.chb14 = false;
+    this.chb15 = false;
+    this.chb16 = false;
+    this.chb17 = false;
+    this.isDisabled = true;
+    this.hallazgos = "";
+  
+    this.carga = false;
+    this.fechaActual = parseInt((Date.now()/1000).toFixed(0));
+    this.so = this.route.snapshot.params['id'];
+    await this.obtenerDepartamentos();
+    await this.obtenerCiudades();
+    await this.obtenerTecnicos();
+    await this.obtenerTipificaciones();
+    await this.obtenerEventosTipificaciones();
+    await this.obtenerOrden();
+    if(this.orden.success == 1){
+      this.existe = true;
+      await this.obtenerCierres();
+      await this.obtenerEstados();
+      await this.obtenerEventos();
+      await this.obtenerVerificaciones();
+    }else{
+      this.existe = false;
+    }
+    this.carga = true;
+  }
+  async obtenerDepartamentos(){
+    this.departamentos = await this.dataApi.getDepartamentos().toPromise();
+    //console.log(this.departamentos);
+  }
+
+  async obtenerCiudades(){
+    this.ciudades = await this.dataApi.getCiudades().toPromise();
+    //console.log(this.ciudades);
+  }
+
+  async obtenerTecnicos(){
+    this.tecnicos = await this.dataApi.getTecnicos().toPromise();
+    //console.log(this.tecnicos);
+  }
+
+  async obtenerTipificaciones(){
+    this.tipificaciones = await this.dataApi.getTipificaciones().toPromise();
+    //console.log(this.tipificaciones);
+  }
+
+  async obtenerCierres(){
+    var tipo = "0";
+    if(this.orden.data.order_type=="Reparar"){
+      tipo = "1";
+    }
+    if(this.orden.data.order_type=="Desinstalación"){
+      tipo = "2";
+    }
+    if(this.orden.data.order_type=="Instalación"){
+      tipo = "3";
+    }
+    if(this.orden.data.order_type=="Reubicación"){
+      tipo = "4";
+    }
+    if(this.orden.data.order_type=="Reinstalación"){
+      tipo = "5";
+    }
+    this.cierres = await this.dataApi.getCierres(tipo).toPromise();
+    //console.log(this.cierres);
+  }
+
+  async obtenerEventosTipificaciones(){
+    this.eventos = await this.dataApi.getEventosTipificaciones().toPromise();
+    //console.log(this.eventos);
+  }
+
+  async obtenerEstados(){
+    this.estadosSO = await this.dataApi.getEstadosSO(this.so).toPromise();
+    //console.log(this.estadosSO);
+  }
+
+  async obtenerEventos(){
+    this.eventosSO = await this.dataApi.getEventosSO(this.so).toPromise();
+    //console.log(this.eventosSO);
+  }
+
+  async obtenerVerificaciones(){
+    this.verificacionSO = await this.dataApi.getVerficiacionSO(this.so).toPromise();
+    //console.log(this.verificacionSO);
+  }
+
+  async obtenerOrden(){
+    this.orden = await this.dataApi.getOrdenBySO(this.so).toPromise();
+    //console.log(this.orden);
+    //console.log(this.orden.success);
+    if(this.orden.success == 1){
+      
+      this.estadoSO = this.orden.data.status;
+      console
+      if(this.estadoSO == "Ingresada"){
+        this.estados = ["Agendada", "Seguimiento Focal", "Cancelada"];
+      }
+      if(this.estadoSO == "Agendada"){
+        this.estados = ["Agendada", "Cerrada", "Seguimiento Focal", "Cancelada"];
+      }
+      if(this.estadoSO == "Seguimiento Focal"){
+        this.estados = ["Seguimiento Focal", "Agendada", "Cancelada"];
+      }
+      if(this.estadoSO == "Cerrada"){
+        this.estados = ["Cerrada", "Ingresada", "Seguimiento Focal", "Cancelada"];
+      }
+      if(this.estadoSO == "Cancelada"){
+        this.estados = ["Cancelada", "Ingresada", "Seguimiento Focal"];
+      }
+
+      for (let j in this.departamentos) {
+        if(this.orden.data.state == this.departamentos[j].abbreviation){
+          this.orden.data.departamento = this.departamentos[j].name;
+          break;
+        }
+      }  
+      for (let j in this.ciudades) {
+        this.orden.data.ciudad = this.orden.data.city.toUpperCase();
+        this.orden.data.ciudadTipo = "-------------";;
+        this.orden.data.ciudadCover = "-------------";
+        if(this.orden.data.city.toUpperCase() == this.ciudades[j].name_ori.toUpperCase()){
+          this.orden.data.ciudad = this.ciudades[j].name_real.toUpperCase();
+          this.orden.data.ciudadTipo = this.ciudades[j].type;
+          this.orden.data.ciudadCover = this.ciudades[j].cover;
+          break;
+        }
+        
+        
+        
+      }
+
+
+      var dateMomentObject = moment(this.orden.data.date_entered, "DD/MM/YYYY HH:mm:ss"); 
+      var fechaOrden = dateMomentObject.toDate();
+      this.orden.data.dias = this.convertirHoras(this.fechaActual - parseInt((fechaOrden.getTime()/1000).toFixed(0)));
+
+      
+    }
+  }
+  async estadoNuevo(nuevoEstado:string){
+    let old_state = null;
+    for(let i in this.estadosSO){
+      if(this.estadosSO[i].name=="Agendada"){
+        old_state = this.estadosSO[i];
+        break;
+      }
+    }
+    
+
+    if(old_state!=null){ //si existe un esstado "AGENDADA", cargar data
+      this.form2 = new FormGroup({
+        nombreCliente: new FormControl(old_state.nombreCliente, Validators.required),
+        telefono1Cliente: new FormControl(old_state.telefono1, Validators.required),
+        telefono2Cliente: new FormControl(old_state.telefono2),
+        ubicacionObsCliente: new FormControl(old_state.ubicacion, Validators.required),
+        conversacionObsCliente: new FormControl(old_state.conversacion, Validators.required),
+        observacionesCliente: new FormControl(old_state.observations, Validators.required),
+        tecnicoNombre: new FormControl(null, Validators.required),
+        fechaAgenda: new FormControl(null, Validators.required),
+        franjaAgenda: new FormControl(null, Validators.required),
+      });
+    }
+
+    //console.log(nuevoEstado);
+    this.estadoNuevoValor = nuevoEstado;
+    if(nuevoEstado == "Ingresada"){
+      this.tipoAlerta = 0;
+    }
+    if(nuevoEstado == "Agendada"){
+      this.tipoAlerta = 1;
+    }
+    if(nuevoEstado == "Seguimiento Focal"){
+      this.tipoAlerta = 2;
+    }
+    if(nuevoEstado == "Cancelada"){
+      this.tipoAlerta = 0;
+    }
+    if(nuevoEstado == "Cerrada"){
+      this.tipoAlerta = 3;
+    }
+    
+    
+  }
+  onChangeAuditoria(){
+    //console.log(this.form6.value.auditoria);
+    if(this.form6.value.auditoria=="SI"){
+      this.isDisabled = false;
+    }else{
+      this.isDisabled = true;
+    }
+  }
+  convertirHoras(tiempo:number):number{
+    // //console.log(tiempo);
+    tiempo = tiempo/3600;
+    tiempo = tiempo/24;
+    var tiempoFinal = parseFloat(tiempo.toFixed(2));
+    return tiempoFinal;
+  }
+
+  async enviarDatosForm1() {
+    //console.log("Formulario 1");
+    console.warn(this.form1.value);
+    //console.log(this.estadoNuevoValor);
+    var observacionesF1 = this.form1.value.observaciones;
+    //console.log(observacionesF1);
+    var fechaGuardar = this.obtenerFechaActualVerificacion();
+    let fechaServer:any=await this.dataApi.getDateServer().toPromise();
+    let fechaReal=fechaServer.long;//AAAA-MM-DD HH-mm-ss
+    var usuario = this.authService.getCurrentUser().username;
+    var actualizarSO = await this.dataApi.actualizarSOEstadoSimple(this.so, this.estadoNuevoValor).toPromise();
+    var adicionarLogVerificacion = await this.dataApi.adicionarLogSimple(this.so, this.estadoNuevoValor, fechaGuardar, usuario, observacionesF1, fechaReal).toPromise();
+    this.form1.reset();
+    this.getOrden();
+    // //console.log(this.form1.value.Observaciones);
+  }
+  cambiarFecha(fechaVieja){
+    //console.log(fechaVieja);
+    // 23/08/2019
+    var fechaForm = fechaVieja.split("-")[2]+"/"+fechaVieja.split("-")[1]+"/"+fechaVieja.split("-")[0];
+    //console.log(fechaForm);
+    return fechaForm;
+  }
+  async enviarDatosForm2() {
+    //console.log("Formulario 2");
+    console.warn(this.form2.value);
+
+    var fechaGuardar = this.obtenerFechaActualVerificacion();
+    var conversacionObsClienteF2 = this.form2.value.conversacionObsCliente;
+    var fechaAgendaF2 = this.form2.value.fechaAgenda;
+    var franjaAgendaF2 = this.form2.value.franjaAgenda;
+    var nombreClienteF2 = this.form2.value.nombreCliente;
+    var observacionesClienteF2 = this.form2.value.observacionesCliente;
+    var tecnicoNombreF2 = this.form2.value.tecnicoNombre;
+    var telefono1ClienteF2 = this.form2.value.telefono1Cliente;
+    var telefono2ClienteF2 = this.form2.value.telefono2Cliente;
+    var ubicacionObsClienteF2 = this.form2.value.ubicacionObsCliente;
+    var usuario = this.authService.getCurrentUser().username;
+
+    var fechaAgendaF2Form = this.cambiarFecha(fechaAgendaF2);
+
+    let fechaServer:any=await this.dataApi.getDateServer().toPromise();
+    let fechaReal=fechaServer.long;//AAAA-MM-DD HH-mm-ss
+
+    //console.log(fechaAgendaF2Form);
+    var actualizarSO = await this.dataApi.actualizarSOEstadoAgendada(this.so, "Agendada", tecnicoNombreF2, fechaAgendaF2Form, franjaAgendaF2).toPromise();
+    var adicionarLogVerificacion = await this.dataApi.adicionarLogAgendada(this.so, "Agendada", fechaGuardar, usuario, observacionesClienteF2, nombreClienteF2.toUpperCase(), telefono1ClienteF2, telefono2ClienteF2, ubicacionObsClienteF2, conversacionObsClienteF2, tecnicoNombreF2, fechaAgendaF2Form, franjaAgendaF2, fechaReal).toPromise();
+    this.form2.reset();
+    this.getOrden();
+    
+  }
+
+  async enviarDatosForm3() {
+    //console.log("Formulario 3");
+    // console.warn(this.form3.value);
+    //console.log(this.estadoNuevoValor);
+    var observacionesF3 = this.form3.value.observaciones;
+    var tipificacionF3 = this.form3.value.tipificacionNombre;
+    //console.log(observacionesF3);
+    var fechaGuardar = this.obtenerFechaActualVerificacion();
+    let fechaServer:any=await this.dataApi.getDateServer().toPromise();
+    let fechaReal=fechaServer.long;//AAAA-MM-DD HH-mm-ss
+    var usuario = this.authService.getCurrentUser().username;
+    var actualizarSO = await this.dataApi.actualizarSOEstadoSimple(this.so, this.estadoNuevoValor).toPromise();
+    var adicionarLogVerificacion = await this.dataApi.adicionarLogTipificacion(this.so, this.estadoNuevoValor, fechaGuardar, usuario, observacionesF3, tipificacionF3, fechaReal).toPromise();
+    this.getOrden();
+
+    this.form3.reset();
+    // //console.log(this.form1.value.Observaciones);
+  }
+  async enviarDatosForm4() {
+    //console.log("Formulario 4");
+    console.warn(this.form4.value);
+    var fechaNuevaF4 = this.form4.value.fechaNueva;
+    var tipoF4 = this.form4.value.tipo;
+    //console.log(fechaNuevaF4);
+    // this.validarFechaVerificacion(fechaNuevaF4);
+    //console.log(tipoF4);
+    var fechaGuardar = this.obtenerFechaActualVerificacion();
+    //console.log(fechaGuardar);
+    var actualizarSO = await this.dataApi.actualizarSOVerificacion(this.so, this.orden.data.date_entered, fechaNuevaF4, tipoF4, this.authService.getCurrentUser().username).toPromise();
+    var adicionarLogVerificacion = await this.dataApi.adicionarLogVerificacion(this.so, fechaGuardar, fechaNuevaF4, this.authService.getCurrentUser().username).toPromise();
+    this.form4.reset();
+    this.getOrden();
+    // //console.log(this.form1.value.Observaciones);
+  }
+  async enviarDatosForm5() {
+    //console.log("Formulario 5");
+    console.warn(this.form5.value);
+
+    var eventoF5 = this.form5.value.evento;
+    var observacionesEventoF5 = this.form5.value.observacionesEvento;
+    var fechaGuardar1 = this.obtenerFechaActualVerificacion();
+    var fechaGuardar2 = this.obtenerFechaActualEvento();
+    var usuario = this.authService.getCurrentUser().username;
+
+    //console.log(eventoF5);
+    //console.log(observacionesEventoF5);
+    //console.log(fechaGuardar1);
+    //console.log(fechaGuardar2);
+    //console.log(usuario);
+    
+    var adicionarLogEvento = await this.dataApi.adicionarLogEvento(this.so, fechaGuardar1, fechaGuardar2, this.authService.getCurrentUser().username, observacionesEventoF5, eventoF5).toPromise();
+    this.form5.reset();
+    this.getOrden();
+  }
+
+  async enviarDatosForm6() {
+    //console.log("Formulario 6");
+    this.hallazgos = "";
+    
+    if(this.chb1 == true){
+      this.hallazgos = this.hallazgos+"__ANTENA MONTADA SIN LÍNEA DE VISTA";
+    }
+
+    if(this.chb2 == true){
+      this.hallazgos = this.hallazgos+"__CÓDIGO SBC DIFERENTE DE 24.1.1 - 22.3.5 - 0.0.0";
+    }
+
+    if(this.chb3 == true){
+      this.hallazgos = this.hallazgos+"__COORDENADAS NO COINCIDEN";
+    }
+
+    if(this.chb4 == true){
+      this.hallazgos = this.hallazgos+"__FUERA DE COBERTURA SATELITAL";
+    }
+
+    if(this.chb5 == true){
+      this.hallazgos = this.hallazgos+"__MAL ANCLAJE DE ANTENA";
+    }
+
+    if(this.chb6 == true){
+      this.hallazgos = this.hallazgos+"__NO REGISTRA COORDENADAS DE INGRESO O SALIDA";
+    }
+
+    if(this.chb7 == true){
+      this.hallazgos = this.hallazgos+"__PASOS DE OASIS FALTANTES";
+    }
+
+    if(this.chb8 == true){
+      this.hallazgos = this.hallazgos+"__REGISTRO DE EQUIPOS ERRADO";
+    }
+
+    if(this.chb9 == true){
+      this.hallazgos = this.hallazgos+"__REGISTRO DE EQUIPOS INCOMPLETO";
+    }
+
+    if(this.chb10 == true){
+      this.hallazgos = this.hallazgos+"__REGISTRO FOTOGRÁFICO INCOMPLETO";
+    }
+
+    if(this.chb11 == true){
+      this.hallazgos = this.hallazgos+"__REGISTRO FOTOGRÁFICO NO LEGIBLE";
+    }
+
+    if(this.chb12 == true){
+      this.hallazgos = this.hallazgos+"__REGISTRO FOTOGRÁFICO SIN NITIDEZ";
+    }
+
+    if(this.chb13 == true){
+      this.hallazgos = this.hallazgos+"__REGISTRO INAPROPIADO DE EQUIPOS PARA INVAS";
+    }
+
+    if(this.chb14 == true){
+      this.hallazgos = this.hallazgos+"__SIN CÓDIGO DE ACTIVACIÓN";
+    }
+
+    if(this.chb15 == true){
+      this.hallazgos = this.hallazgos+"__SIN SIGNOFF";
+    }
+
+    if(this.chb16 == true){
+      this.hallazgos = this.hallazgos+"__SQF POR DEBAJO DEL OBJETIVO";
+    }
+
+    if(this.chb17 == true){
+      this.hallazgos = this.hallazgos+"__VOLTAJES MAL TOMADOS";
+    }
+
+    if(this.hallazgos==""){
+      this.hallazgos = "SIN HALLAZGOS";
+    }
+
+    // //console.log(this.hallazgos);
+
+    // console.warn(this.form6.value);
+    // //console.log(this.estadoNuevoValor);
+    var observacionesF6 = this.form6.value.observaciones;
+    var tipificacionF6 = this.form6.value.tipificacionNombre;
+    var auditoriaF6 = this.form6.value.auditoria;
+    if(auditoriaF6 == "NO"){
+      this.hallazgos = "N/A";
+    }
+    // //console.log(observacionesF6);
+    var fechaGuardar = this.obtenerFechaActualVerificacion();
+    let fechaServer:any=await this.dataApi.getDateServer().toPromise();
+    let fechaReal=fechaServer.long;//AAAA-MM-DD HH-mm-ss
+    var usuario = this.authService.getCurrentUser().username;
+    var actualizarSO = await this.dataApi.actualizarSOEstadoSimple(this.so, this.estadoNuevoValor).toPromise();
+    var adicionarLogVerificacion = await this.dataApi.adicionarLogTipificacionCierre(this.so, this.estadoNuevoValor, fechaGuardar, usuario, observacionesF6, tipificacionF6, auditoriaF6, this.hallazgos, fechaReal).toPromise();
+
+    this.form6.reset();
+    this.getOrden();
+    // //console.log(this.form1.value.Observaciones);
+  }
+
+
+  verEvento(fechaEvento, usuarioEvento, nombreEvento, observacionesEvento){
+    
+    //console.log(fechaEvento);
+    //console.log(usuarioEvento);
+    //console.log(nombreEvento);
+    //console.log(observacionesEvento);
+    this.fechaEvento = fechaEvento;
+    this.usuarioEvento = usuarioEvento;
+    this.nombreEvento = nombreEvento;
+    this.observacionesEvento = observacionesEvento;
+
+  }
+
+  verEstado(conversacion, date, fechaAgendamiento, franjaAgendamiento, name, nombreCliente, observations, tecnico, telefono1, telefono2, tipificacion, ubicacion, user, hallazgosE, auditoriaE){
+    //console.log(conversacion);
+    //console.log(date);
+    //console.log(fechaAgendamiento);
+    //console.log(franjaAgendamiento);
+    //console.log(name);
+    //console.log(nombreCliente);
+    //console.log(observations);
+    //console.log(tecnico);
+    //console.log(telefono1);
+    //console.log(telefono2);
+    //console.log(tipificacion);
+    //console.log(ubicacion);
+    //console.log(user);
+
+    this.conversacionEst = conversacion;
+    this.dateEst = date;
+    this.fechaAgendamientoEst = fechaAgendamiento;
+    this.franjaAgendamientoEst = franjaAgendamiento;
+    this.nameEst = name;
+    this.nombreClienteEst = nombreCliente;
+    this.observationsEst = observations;
+    this.tecnicoEst = tecnico;
+    this.telefono1Est = telefono1;
+    this.telefono2Est = telefono2;
+    this.tipificacionEst = tipificacion;
+    this.ubicacionEst = ubicacion;
+    this.userEst = user;
+
+    if(this.nameEst == "Ingresada"){
+      this.tipoAlertaEstado = 0;
+    }else if(this.nameEst == "Agendada"){
+      this.tipoAlertaEstado = 1;
+    }else if(this.nameEst == "Cerrada"){
+      this.tipoAlertaEstado = 3;
+      if(hallazgosE!=null){
+        hallazgosE = hallazgosE.replace("__", "- ");
+        this.hallazgosEst = hallazgosE.replaceAll("__", "\n- ");
+      }else{
+        this.hallazgosEst = hallazgosE;
+      }
+      this.auditoriaEst = auditoriaE;
+    }else if(this.nameEst == "Seguimiento Focal"){
+      this.tipoAlertaEstado = 2;
+    }else if(this.nameEst == "Cancelada"){
+      this.tipoAlertaEstado = 0;
+    }else{
+      this.tipoAlertaEstado = 0;
+    }
+    
+  }
+  validarFechaVerificacion(fechaRev){
+
+  }
+
+  obtenerFechaActualEvento(): string{
+    const fechaAct = new Date();
+    const anioActual = fechaAct.getFullYear();
+    const mesActual = (fechaAct.getMonth())+1;
+    const diaActual = fechaAct.getDate();
+    const horaActual = fechaAct.getHours();
+    const minutoActual = fechaAct.getMinutes();
+   
+    // //console.log(fechaCreacion);
+    var mesF = mesActual+"";
+    var diaF = diaActual+"";
+    var horaF = horaActual+"";
+    var minutoF = minutoActual+"";
+
+    if(mesActual<10){
+      mesF="0"+mesActual;
+    }
+    if(diaActual<10){
+      diaF="0"+diaActual;
+    }
+    if(horaActual<10){
+      horaF="0"+horaActual;
+    }
+    if(minutoActual<10){
+      minutoF="0"+minutoActual;
+    }
+    var fechaCreacion = anioActual+"-"+mesF+"-"+diaF+" "+horaF+":"+minutoF;
+    // var fechaCreacion = diaF+"/"+mesF+"/"+anioActual+" "+horaF+":"+minutoF+":00";
+    // var fechaCreacion = anioActual+"-"+mesActual+"-"+diaActual+" "+horaActual+":"+minutoActual+":00";
+    return fechaCreacion;
+    // //console.log(fechaAct);
+  }
+  obtenerFechaActualVerificacion(): string{
+    const fechaAct = new Date();
+    const anioActual = fechaAct.getFullYear();
+    const mesActual = (fechaAct.getMonth())+1;
+    const diaActual = fechaAct.getDate();
+    const horaActual = fechaAct.getHours();
+    const minutoActual = fechaAct.getMinutes();
+   
+    // //console.log(fechaCreacion);
+    var mesF = mesActual+"";
+    var diaF = diaActual+"";
+    var horaF = horaActual+"";
+    var minutoF = minutoActual+"";
+
+    if(mesActual<10){
+      mesF="0"+mesActual;
+    }
+    if(diaActual<10){
+      diaF="0"+diaActual;
+    }
+    if(horaActual<10){
+      horaF="0"+horaActual;
+    }
+    if(minutoActual<10){
+      minutoF="0"+minutoActual;
+    }
+    // 24/01/2020 19:57:15
+    var fechaCreacion = diaF+"/"+mesF+"/"+anioActual+" "+horaF+":"+minutoF+":00";
+    // var fechaCreacion = anioActual+"-"+mesActual+"-"+diaActual+" "+horaActual+":"+minutoActual+":00";
+    return fechaCreacion;
+    // //console.log(fechaAct);
+  }
+
+  eventCheck(inputCheck, id){
+    // //console.log(id);
+    // //console.log(inputCheck.target.checked)
+    if(id == "1"){this.chb1 = inputCheck.target.checked;}
+    if(id == "2"){this.chb2 = inputCheck.target.checked;}
+    if(id == "3"){this.chb3 = inputCheck.target.checked;}
+    if(id == "4"){this.chb4 = inputCheck.target.checked;}
+    if(id == "5"){this.chb5 = inputCheck.target.checked;}
+    if(id == "6"){this.chb6 = inputCheck.target.checked;}
+    if(id == "7"){this.chb7 = inputCheck.target.checked;}
+    if(id == "8"){this.chb8 = inputCheck.target.checked;}
+    if(id == "9"){this.chb9 = inputCheck.target.checked;}
+    if(id == "10"){this.chb10 = inputCheck.target.checked;}
+    if(id == "11"){this.chb11 = inputCheck.target.checked;}
+    if(id == "12"){this.chb12 = inputCheck.target.checked;}
+    if(id == "13"){this.chb13 = inputCheck.target.checked;}
+    if(id == "14"){this.chb14 = inputCheck.target.checked;}
+    if(id == "15"){this.chb15 = inputCheck.target.checked;}
+    if(id == "16"){this.chb16 = inputCheck.target.checked;}    
+    if(id == "17"){this.chb17 = inputCheck.target.checked;}    
+
+    // //console.log(this.chb1+" "+
+    //     this.chb2+" "+
+    //     this.chb3+" "+
+    //     this.chb4+" "+
+    //     this.chb5+" "+
+    //     this.chb6+" "+
+    //     this.chb7+" "+
+    //     this.chb8+" "+
+    //     this.chb9+" "+
+    //     this.chb10+" "+
+    //     this.chb11+" "+
+    //     this.chb12+" "+
+    //     this.chb13+" "+
+    //     this.chb14+" "+
+    //     this.chb15+" "+
+    //     this.chb16+" "+
+    //     this.chb17);
+  }
+
+  disableIt(){
+    return false;
+  }

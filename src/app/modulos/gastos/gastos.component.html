@@ -44,7 +44,7 @@
                             <td>{{ item.id }}</td>
                             <td>{{ truncateText(item.fecha, 15) }}</td>
                             <td>{{ truncateText(item.razon_social, 15) }}</td>
-                            <td>{{ truncateText(item.nit_cc, 15) }}</td>
+                            <td>{{ truncateText(item.nit_cc, 10) }}</td>
                             <td>{{ truncateText(item.guia, 15) }}</td>
                             <td style="color: red;">{{ truncateText(item.factura, 15) }}</td>
                             <td>{{ truncateText(item.proyecto, 15) }}</td>
@@ -80,7 +80,7 @@
         </div>
 
         <div class="container">
-            <form [formGroup]="formSuports" (ngSubmit)="addSuport()" class="w-100 mx-auto">
+            <form [formGroup]="formSuports" (ngSubmit)="addSupport()" class="w-100 mx-auto">
                 <div class="row mb-4">
                   <div class="col-md-4">
                     <label class="form-label mb-2">Fecha</label>
@@ -159,7 +159,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                  <button  type="submit" class="btn btn-success">Guardar</button>
+                  <button [disabled]="formSuports.invalid" type="submit" class="btn btn-success" (click)="addSupport()" data-dismiss="modal" >Guardar</button>
                 </div>
               </form>
         </div>  
@@ -254,12 +254,11 @@
             <div class="col-md-9">
               <label class="form-label mb-2">Documento</label>
               <input  class="form-control" type="file">
-              
             </div>
           </div>
           <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-          <button [disabled]="formSuports.invalid" type="submit" class="btn btn-success">Guardar</button>
+          <button  type="submit" class="btn btn-success" (click)="editSuport()" data-dismiss="modal">Guardar</button>
         </div>
         </form>
       </div>  
